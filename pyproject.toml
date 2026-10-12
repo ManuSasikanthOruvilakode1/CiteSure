@@ -1,0 +1,58 @@
+[project]
+name = "citesure"
+version = "0.1.0"
+description = "CiteSure: grounded document Q&A with hybrid retrieval, reranking and continuous faithfulness evaluation."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "httpx>=0.27",
+    "numpy>=1.26",
+    "rank-bm25>=0.2.2",
+    "sentence-transformers>=3.0.0",
+    "torch>=2.3",
+    "pypdf>=4.0",
+    "pydantic>=2.7.0",
+    "pyyaml>=6.0.1",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "rich>=13.7.0",
+]
+
+[project.optional-dependencies]
+qdrant = ["qdrant-client>=1.9.0"]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/citesure"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+# Windows gets CUDA torch so the reranker runs on an NVIDIA GPU (it falls back to CPU when
+# none is present); Linux (CI, Docker) gets the much smaller CPU-only build.
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu126", marker = "sys_platform == 'win32'" },
+    { index = "pytorch-cpu", marker = "sys_platform != 'win32'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true

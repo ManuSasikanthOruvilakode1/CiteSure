@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CiteSure Demo</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --text: #1d1d1b; --muted: #6b6b66;
+    --border: #e3e3de; --accent: #2f5bd3; --accent-soft: #e8eefc; --cite: #8a4b00;
+    --cite-bg: #fff2df; --error: #b42318;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #151514; --panel: #1f1f1d; --text: #ececea; --muted: #a0a09a;
+      --border: #33332f; --accent: #7c9cff; --accent-soft: #232b45; --cite: #ffc27a;
+      --cite-bg: #3a2a14; --error: #ff8a80;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { margin: 0; font-size: 26px; letter-spacing: -0.01em; }
+  .tagline { margin: 4px 0 24px; color: var(--muted); }
+  form { display: flex; flex-wrap: wrap; gap: 8px; }
+  input[type=text] {
+    flex: 1 1 360px; padding: 11px 14px; font: inherit; color: var(--text);
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+  }
+  select, button {
+    padding: 10px 14px; font: inherit; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--panel); color: var(--text);
+  }
+  button { background: var(--accent); border-color: var(--accent); color: #fff; cursor: pointer; }
+  button:disabled { opacity: 0.6; cursor: wait; }
+  input:focus-visible, select:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  .examples { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .examples button {
+    background: var(--accent-soft); color: var(--accent); border: none;
+    padding: 4px 10px; font-size: 13px; border-radius: 999px;
+  }
+  section {
+    margin-top: 24px; background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  section h2 {
+    margin: 0 0 10px; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--muted);
+  }
+  #answer { white-space: pre-wrap; min-height: 1.6em; }
+  #answer.error { color: var(--error); }
+  .cite {
+    color: var(--cite); background: var(--cite-bg); border-radius: 4px;
+    padding: 0 3px; font-weight: 600; text-decoration: none;
+  }
+  .empty { margin: 0; color: var(--muted); }
+  #status { color: var(--muted); font-size: 13px; margin-top: 10px; }
+  ol#sources { margin: 0; padding: 0; list-style: none; }
+  ol#sources li {
+    border-top: 1px solid var(--border); padding: 12px 0;
+  }
+  ol#sources li:first-child { border-top: none; padding-top: 0; }
+  ol#sources li.cited .num { background: var(--cite-bg); color: var(--cite); }
+  .meta { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .num {
+    font-weight: 700; font-size: 13px; padding: 1px 7px; border-radius: 4px;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .where { font-weight: 600; }
+  .score { color: var(--muted); font-size: 13px; margin-left: auto; font-variant-numeric: tabular-nums; }
+  details { margin-top: 6px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  details pre {
+    white-space: pre-wrap; font: 13px/1.5 ui-monospace, Consolas, monospace;
+    background: var(--bg); padding: 10px; border-radius: 6px; margin: 8px 0 0;
+  }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>CiteSure</h1>
+  <p class="tagline">Grounded document Q&amp;A: every answer cites the passages it came from.</p>
+
+  <form id="ask">
+    <input id="question" type="text" placeholder="Ask about the indexed documentation…"
+           aria-label="Question" autocomplete="off" required>
+    <select id="mode" aria-label="Retrieval mode">
+      <option value="hybrid_rerank">Hybrid + rerank</option>
+      <option value="hybrid">Hybrid (RRF)</option>
+      <option value="dense">Dense only</option>
+      <option value="bm25">BM25 only</option>
+    </select>
+    <button id="submit" type="submit">Ask</button>
+  </form>
+  <div class="examples" aria-label="Example questions">
+    <button type="button">How do I verify a webhook signature?</button>
+    <button type="button">What should I do when I get HTTP 429?</button>
+    <button type="button">How long are OAuth refresh tokens valid?</button>
+    <button type="button">What is the capital of France?</button>
+  </div>
+
+  <section id="answer-panel" hidden>
+    <h2>Answer</h2>
+    <div id="answer" aria-live="polite"></div>
+    <div id="status"></div>
+  </section>
+
+  <section id="sources-panel" hidden>
+    <h2>Retrieved passages</h2>
+    <p id="no-sources" class="empty" hidden>
+      No passage in the indexed documents is relevant to this question, so CiteSure
+      declines to answer rather than guess.
+    </p>
+    <ol id="sources"></ol>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const form = $("ask"), questionEl = $("question"), submitBtn = $("submit");
+const answerEl = $("answer"), statusEl = $("status"), sourcesEl = $("sources");
+
+document.querySelectorAll(".examples button").forEach((b) =>
+  b.addEventListener("click", () => { questionEl.value = b.textContent; form.requestSubmit(); }));
+
+// Render answer text with [n] citations turned into links to the matching passage.
+function renderAnswer(text) {
+  answerEl.replaceChildren();
+  let last = 0;
+  for (const m of text.matchAll(/\[(\d+)\]/g)) {
+    answerEl.append(text.slice(last, m.index));
+    const a = document.createElement("a");
+    a.className = "cite"; a.href = "#src-" + m[1]; a.textContent = m[0];
+    answerEl.append(a);
+    last = m.index + m[0].length;
+  }
+  answerEl.append(text.slice(last));
+}
+
+function renderSources(sources) {
+  sourcesEl.replaceChildren();
+  $("sources-panel").hidden = false;
+  $("no-sources").hidden = sources.length > 0;
+  for (const s of sources) {
+    const li = document.createElement("li");
+    li.id = "src-" + s.index;
+    const meta = document.createElement("div"); meta.className = "meta";
+    const num = document.createElement("span"); num.className = "num"; num.textContent = s.index;
+    const where = document.createElement("span"); where.className = "where";
+    where.textContent = s.source + (s.section ? " › " + s.section.split(" > ").pop() : "");
+    const score = document.createElement("span"); score.className = "score";
+    score.textContent = "score " + s.score.toFixed(3);
+    meta.append(num, where, score);
+    const details = document.createElement("details");
+    const summary = document.createElement("summary"); summary.textContent = "Show passage";
+    const pre = document.createElement("pre"); pre.textContent = s.text;
+    details.append(summary, pre);
+    li.append(meta, details);
+    sourcesEl.append(li);
+  }
+}
+
+function markCited(cited) {
+  for (const n of cited) $("src-" + n)?.classList.add("cited");
+}
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const question = questionEl.value.trim();
+  if (!question) return;
+  submitBtn.disabled = true;
+  $("answer-panel").hidden = false;
+  answerEl.className = ""; answerEl.textContent = "";
+  statusEl.textContent = "Retrieving passages…";
+  sourcesEl.replaceChildren(); $("sources-panel").hidden = true;
+  const started = performance.now();
+  let text = "";
+
+  try {
+    const resp = await fetch("/query/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question, mode: $("mode").value }),
+    });
+    if (!resp.ok) throw new Error(`Server returned ${resp.status}: ${await resp.text()}`);
+
+    // Parse the Server-Sent Events stream: blocks of "event: x\ndata: json" separated by blank lines.
+    const reader = resp.body.getReader(), decoder = new TextDecoder();
+    let buffer = "";
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = buffer.indexOf("\n\n")) !== -1) {
+        const block = buffer.slice(0, sep); buffer = buffer.slice(sep + 2);
+        const event = /^event: (.*)$/m.exec(block)?.[1];
+        const data = JSON.parse(/^data: (.*)$/m.exec(block)?.[1] ?? "null");
+        if (event === "sources") { renderSources(data); statusEl.textContent = "Generating answer…"; }
+        else if (event === "token") { text += data; renderAnswer(text); }
+        else if (event === "done") { markCited(data.cited); }
+        else if (event === "error") throw new Error(data);
+      }
+    }
+    statusEl.textContent = `Answered in ${((performance.now() - started) / 1000).toFixed(1)} s`;
+  } catch (err) {
+    answerEl.className = "error";
+    answerEl.textContent = err.message;
+    statusEl.textContent = "";
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

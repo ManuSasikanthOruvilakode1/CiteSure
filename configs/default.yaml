@@ -1,0 +1,46 @@
+project:
+  name: "citesure"
+  version: "0.1.0"
+
+paths:
+  documents_dir: "data/documents"
+  index_dir: "artifacts/index"
+  eval_dataset: "data/evaluation/qa_pairs.jsonl"
+  reports_dir: "artifacts/reports"
+
+chunking:
+  chunk_size_tokens: 512
+  chunk_overlap_tokens: 51   # ~10% overlap
+
+models:
+  embedding_model: "BAAI/bge-large-en-v1.5"
+  # BGE v1.5 recommends this instruction prefix for retrieval queries (not passages).
+  embedding_query_instruction: "Represent this sentence for searching relevant passages: "
+  reranker_model: "BAAI/bge-reranker-large"
+  # Local LLM served by Ollama (https://ollama.com): run `ollama pull qwen2.5:7b` first.
+  llm_generator: "qwen2.5:7b"
+  llm_judge: "qwen2.5:7b"
+  ollama_host: "http://localhost:11434"   # env CITESURE_OLLAMA_HOST overrides this
+  ollama_num_ctx: 8192          # Ollama's default context would truncate 5 x 512-token passages
+  generator_temperature: 0.1    # the judge always runs at temperature 0
+
+retrieval:
+  vector_store: "numpy"   # "numpy" (in-process) or "qdrant" (requires the `qdrant` extra)
+  top_k_dense: 30
+  top_k_sparse: 30
+  top_k_fused: 30
+  top_k_reranked: 5
+  rrf_k: 60
+  # Reranked passages scoring below this are dropped (relevant ones score ~0.1-1.0,
+  # unrelated ones <0.01). If none remain, the system refuses without calling the LLM.
+  min_rerank_score: 0.02
+
+evaluation:
+  min_context_relevance: 0.85
+  min_faithfulness: 0.92
+  min_answer_relevance: 0.90
+  test_dataset_size: 200
+
+serving:
+  host: "0.0.0.0"
+  port: 8001

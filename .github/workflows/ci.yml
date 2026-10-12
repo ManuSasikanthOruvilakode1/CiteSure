@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - run: uv run ruff check src scripts tests
+      - run: uv run pytest -q
+
+  # RAG Triad regression gate: fails the PR if faithfulness (or any other metric)
+  # drops below the thresholds in configs/default.yaml. Opt-in, because it needs a
+  # local LLM: register a self-hosted runner with Ollama and a GPU, then set the
+  # repository variable RUN_EVAL_GATE=true.
+  eval-gate:
+    needs: test
+    runs-on: self-hosted
+    if: github.event_name == 'pull_request' && vars.RUN_EVAL_GATE == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-${{ hashFiles('configs/default.yaml') }}
+      - run: uv sync --frozen
+      - run: uv run python scripts/build_index.py
+      - run: uv run python scripts/evaluate_pipeline.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: artifacts/reports/

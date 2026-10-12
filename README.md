@@ -84,6 +84,7 @@ citesure/
 │   ├── test_evaluation.py
 │   └── test_serving.py
 ├── .gitignore
+├── LICENSE                          # MIT License
 ├── Dockerfile                       # API server image (index and models mounted)
 ├── pyproject.toml                   # Package metadata, dependencies, tool settings
 ├── uv.lock                          # Locked dependency versions
@@ -159,3 +160,9 @@ Still open:
 - **Human-reviewed evaluation subset** and judge-vs-human agreement, to put a number on judge reliability.
 
 See [`PROJECT_EXPLANATION_AND_ARCHITECTURE.md`](PROJECT_EXPLANATION_AND_ARCHITECTURE.md) for the architecture and the metric definitions.
+
+## License
+
+CiteSure is released under the [MIT License](LICENSE).
+
+The indexed corpus in `data/documents/fastapi/` is the [FastAPI documentation](https://github.com/fastapi/fastapi), © Sebastián Ramírez, also under the MIT License; its licence text is kept alongside it in `data/documents/fastapi/LICENSE`.

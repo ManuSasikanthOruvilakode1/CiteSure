@@ -32,12 +32,15 @@ class OllamaClient:
         host: str = "http://localhost:11434",
         temperature: float = 0.0,
         num_ctx: int = 8192,
+        max_tokens: int = 1536,
         timeout: float = 300.0,
         http: httpx.Client | None = None,
     ) -> None:
         self.model = model
         # Ollama's default context (2-4k tokens) would silently truncate 5 x 512-token passages.
-        self.options = {"temperature": temperature, "num_ctx": num_ctx}
+        # num_predict caps output length: without it a small model can loop (e.g. an
+        # endless JSON list) for minutes and block every request queued behind it.
+        self.options = {"temperature": temperature, "num_ctx": num_ctx, "num_predict": max_tokens}
         self.http = http or httpx.Client(base_url=host, timeout=timeout)
 
     def _body(self, system: str, prompt: str, **extra) -> dict:
@@ -109,4 +112,5 @@ def make_llm(models, role: str = "generator") -> LLMClient:
         host=os.environ.get("CITESURE_OLLAMA_HOST", models.ollama_host),
         temperature=models.generator_temperature if role == "generator" else 0.0,
         num_ctx=models.ollama_num_ctx,
+        max_tokens=models.max_output_tokens,
     )

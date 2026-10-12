@@ -88,7 +88,7 @@
   <p class="tagline">Grounded document Q&amp;A: every answer cites the passages it came from.</p>
 
   <form id="ask">
-    <input id="question" type="text" placeholder="Ask about the indexed documentation…"
+    <input id="question" type="text" placeholder="Ask about the FastAPI documentation…"
            aria-label="Question" autocomplete="off" required>
     <select id="mode" aria-label="Retrieval mode">
       <option value="hybrid_rerank">Hybrid + rerank</option>
@@ -99,9 +99,9 @@
     <button id="submit" type="submit">Ask</button>
   </form>
   <div class="examples" aria-label="Example questions">
-    <button type="button">How do I verify a webhook signature?</button>
-    <button type="button">What should I do when I get HTTP 429?</button>
-    <button type="button">How long are OAuth refresh tokens valid?</button>
+    <button type="button">How do I declare an optional query parameter?</button>
+    <button type="button">How do I run cleanup code after a dependency with yield?</button>
+    <button type="button">How can I return a custom status code from a path operation?</button>
     <button type="button">What is the capital of France?</button>
   </div>
 
@@ -170,10 +170,17 @@ function markCited(cited) {
   for (const n of cited) $("src-" + n)?.classList.add("cited");
 }
 
+// Only one question is answered at a time: a new question cancels the one in flight,
+// so two streams never write into the same answer (the local LLM serves requests serially).
+let inflight = null;
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const question = questionEl.value.trim();
   if (!question) return;
+  inflight?.abort();
+  const controller = new AbortController();
+  inflight = controller;
   submitBtn.disabled = true;
   $("answer-panel").hidden = false;
   answerEl.className = ""; answerEl.textContent = "";
@@ -187,6 +194,7 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question, mode: $("mode").value }),
+      signal: controller.signal,
     });
     if (!resp.ok) throw new Error(`Server returned ${resp.status}: ${await resp.text()}`);
 
@@ -210,11 +218,12 @@ form.addEventListener("submit", async (e) => {
     }
     statusEl.textContent = `Answered in ${((performance.now() - started) / 1000).toFixed(1)} s`;
   } catch (err) {
+    if (controller.signal.aborted) return;  // superseded by a newer question
     answerEl.className = "error";
     answerEl.textContent = err.message;
     statusEl.textContent = "";
   } finally {
-    submitBtn.disabled = false;
+    if (inflight === controller) { inflight = null; submitBtn.disabled = false; }
   }
 });
 </script>

@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, create_model
 
 from citesure.generation.llm import LLMClient
 from citesure.generation.prompts import format_context
@@ -28,31 +28,27 @@ JUDGE_SYSTEM = (
 )
 
 
-class PassageGrade(BaseModel):
-    passage: int = Field(description="1-based passage number")
-    score: int = Field(description="0 = irrelevant, 1 = tangential, 2 = partially answers, 3 = directly answers")
-
-
-class ContextRelevanceJudgement(BaseModel):
-    grades: list[PassageGrade]
-
-
 class Claims(BaseModel):
-    claims: list[str]
+    claims: list[str] = Field(max_length=15)
 
 
-class ClaimVerdict(BaseModel):
-    claim: str
+class ClaimCheck(BaseModel):
+    reason: str = Field(description="One short sentence citing the supporting text, or what is missing")
     supported: bool
 
 
-class FaithfulnessJudgement(BaseModel):
-    verdicts: list[ClaimVerdict]
+def numbered_schema(name: str, prefix: str, n: int, item: object) -> type[BaseModel]:
+    """A schema with one *required* field per item (``passage_1`` ... ``passage_n``).
+
+    Small judges given a free-form list often return it empty or short. With a fixed set of
+    required fields, schema-constrained decoding cannot finish until every item is judged.
+    """
+    return create_model(name, **{f"{prefix}_{i}": (item, ...) for i in range(1, n + 1)})
 
 
 class AnswerQuestions(BaseModel):
     noncommittal: bool = Field(description="True if the answer evades, refuses, or says it does not know")
-    questions: list[str]
+    questions: list[str] = Field(min_length=1, max_length=5)
 
 
 @dataclass
@@ -78,12 +74,12 @@ class TriadEvaluator:
             f"<passages>\n{format_context(contexts)}\n</passages>\n\n"
             "Grade every passage for how useful it is for answering the question: "
             "0 = irrelevant, 1 = on-topic but does not help answer, 2 = contains part of the "
-            "answer, 3 = directly contains the answer. Return one grade per passage."
+            "answer, 3 = directly contains the answer. Fill in passage_1 for passage [1], passage_2 for [2], and so on."
         )
-        result = self.judge.structured(JUDGE_SYSTEM, prompt, ContextRelevanceJudgement)
-        by_passage = {g.passage: min(max(g.score, 0), 3) for g in result.grades}
-        # Ungraded passages count as irrelevant so a lazy judge cannot inflate the score.
-        return float(np.mean([by_passage.get(i, 0) / 3 for i in range(1, len(contexts) + 1)]))
+        schema = numbered_schema("ContextRelevanceJudgement", "passage", len(contexts), int)
+        result = self.judge.structured(JUDGE_SYSTEM, prompt, schema)
+        grades = [min(max(getattr(result, f"passage_{i}"), 0), 3) for i in range(1, len(contexts) + 1)]
+        return float(np.mean(grades) / 3)
 
     def faithfulness(
         self, answer: str, contexts: list[ScoredChunk]
@@ -104,14 +100,14 @@ class TriadEvaluator:
             JUDGE_SYSTEM,
             f"<context>\n{format_context(contexts)}\n</context>\n\n"
             f"<claims>\n{numbered}\n</claims>\n\n"
-            "For each claim, decide whether it can be directly inferred from the context. "
-            "A claim that adds specifics absent from the context is not supported. Return one "
-            "verdict per claim, in order.",
-            FaithfulnessJudgement,
-        ).verdicts
-        supported = [v for v in verdicts[: len(claims)] if v.supported]
-        unsupported = [v.claim for v in verdicts[: len(claims)] if not v.supported]
-        return len(supported) / len(claims), len(claims), unsupported
+            "For each numbered claim, decide whether it can be directly inferred from the "
+            "context. A claim that adds specifics absent from the context is not supported. "
+            "Fill in claim_1 for claim 1, claim_2 for claim 2, and so on.",
+            numbered_schema("FaithfulnessJudgement", "claim", len(claims), ClaimCheck),
+        )
+        checks = [getattr(verdicts, f"claim_{i}") for i in range(1, len(claims) + 1)]
+        unsupported = [c for c, v in zip(claims, checks, strict=True) if not v.supported]
+        return 1 - len(unsupported) / len(claims), len(claims), unsupported
 
     def answer_relevance(self, question: str, answer: str) -> float:
         result = self.judge.structured(

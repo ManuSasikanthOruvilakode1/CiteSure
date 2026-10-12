@@ -4,12 +4,10 @@ from conftest import ScriptedLLM
 from citesure.config import EvaluationConfig
 from citesure.evaluation.metrics import (
     AnswerQuestions,
+    ClaimCheck,
     Claims,
-    ClaimVerdict,
-    ContextRelevanceJudgement,
-    FaithfulnessJudgement,
-    PassageGrade,
     TriadEvaluator,
+    numbered_schema,
     retrieval_hit_metrics,
 )
 from citesure.evaluation.runner import ModeReport, check_gate
@@ -25,12 +23,10 @@ def _contexts(chunks, n=2):
 def test_faithfulness_is_supported_fraction(chunks, embedder):
     judge = ScriptedLLM(structured={
         "Claims": Claims(claims=["a", "b", "c", "d"]),
-        "FaithfulnessJudgement": FaithfulnessJudgement(verdicts=[
-            ClaimVerdict(claim="a", supported=True),
-            ClaimVerdict(claim="b", supported=True),
-            ClaimVerdict(claim="c", supported=True),
-            ClaimVerdict(claim="d", supported=False),
-        ]),
+        "FaithfulnessJudgement": lambda schema: schema(**{
+            f"claim_{i}": ClaimCheck(reason="r", supported=ok)
+            for i, ok in enumerate([True, True, True, False], start=1)
+        }),
     })
     score, n, unsupported = TriadEvaluator(judge, embedder).faithfulness("ans", _contexts(chunks))
     assert score == 0.75 and n == 4 and unsupported == ["d"]
@@ -41,12 +37,19 @@ def test_faithfulness_with_no_claims_is_perfect(chunks, embedder):
     assert TriadEvaluator(judge, embedder).faithfulness(REFUSAL_MESSAGE, _contexts(chunks))[0] == 1.0
 
 
-def test_context_relevance_counts_missing_grades_as_zero(chunks, embedder):
+def test_context_relevance_is_mean_normalised_grade(chunks, embedder):
     judge = ScriptedLLM(structured={
-        "ContextRelevanceJudgement": ContextRelevanceJudgement(grades=[PassageGrade(passage=1, score=3)])
+        "ContextRelevanceJudgement": lambda schema: schema(passage_1=3, passage_2=0, passage_3=9)
     })
-    score = TriadEvaluator(judge, embedder).context_relevance("q", _contexts(chunks, 2))
-    assert score == pytest.approx(0.5)
+    score = TriadEvaluator(judge, embedder).context_relevance("q", _contexts(chunks, 3))
+    assert score == pytest.approx((3 + 0 + 3) / 9)  # out-of-range grades are clamped to 3
+
+
+def test_numbered_schema_requires_every_item():
+    schema = numbered_schema("S", "claim", 3, bool)
+    assert schema.model_json_schema()["required"] == ["claim_1", "claim_2", "claim_3"]
+    with pytest.raises(ValueError):
+        schema(claim_1=True)  # a judge that skips items is rejected, not silently scored
 
 
 def test_answer_relevance_high_for_matching_questions(embedder):

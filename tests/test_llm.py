@@ -36,6 +36,7 @@ def test_stream_yields_ndjson_content_and_sends_context_size():
     assert _client(handler).complete("sys", "hi") == "Hello world"
     assert seen["stream"] is True
     assert seen["options"]["num_ctx"] == 8192
+    assert seen["options"]["num_predict"] == 1536  # output cap: a looping model cannot stall a run
     assert seen["messages"][0] == {"role": "system", "content": "sys"}
 
 

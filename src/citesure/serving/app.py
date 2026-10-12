@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import json
-from collections.abc import Iterator
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel, Field
+from starlette.concurrency import iterate_in_threadpool
 
 from citesure.config import load_settings
 from citesure.generation.generator import extract_citations
@@ -93,16 +94,24 @@ def create_app(pipeline: RAGPipeline | None = None) -> FastAPI:
         except Exception as exc:  # retrieval failure before streaming starts
             raise HTTPException(status_code=500, detail=str(exc)) from exc
 
-        def events() -> Iterator[str]:
+        async def events() -> AsyncIterator[str]:
             yield _sse("sources", [s.model_dump() for s in _sources(contexts)])
             parts: list[str] = []
             try:
-                for token in tokens:
+                # Each token is pulled in a worker thread. If the client disconnects, the
+                # response task is cancelled after the current token and `finally` closes
+                # the generator, which closes the LLM connection so generation stops
+                # instead of running on and delaying the next question.
+                async for token in iterate_in_threadpool(tokens):
                     parts.append(token)
                     yield _sse("token", token)
             except Exception as exc:  # noqa: BLE001 - surface errors in-band once streaming
                 yield _sse("error", f"{type(exc).__name__}: {exc}")
                 return
+            finally:
+                close = getattr(tokens, "close", None)
+                if close:
+                    close()
             yield _sse("done", {"cited": extract_citations("".join(parts), len(contexts))})
 
         return StreamingResponse(events(), media_type="text/event-stream")

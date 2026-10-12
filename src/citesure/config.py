@@ -32,6 +32,7 @@ class ModelsConfig(BaseModel):
     llm_judge: str = "qwen2.5:7b"
     ollama_host: str = "http://localhost:11434"
     ollama_num_ctx: int = 8192
+    max_output_tokens: int = 1536
     generator_temperature: float = 0.1
 
 
@@ -46,10 +47,10 @@ class RetrievalConfig(BaseModel):
 
 
 class EvaluationConfig(BaseModel):
-    min_context_relevance: float = 0.85
-    min_faithfulness: float = 0.92
-    min_answer_relevance: float = 0.90
-    test_dataset_size: int = 200
+    min_context_relevance: float = 0.45
+    min_faithfulness: float = 0.90
+    min_answer_relevance: float = 0.80
+    test_dataset_size: int = 100
 
 
 class ServingConfig(BaseModel):

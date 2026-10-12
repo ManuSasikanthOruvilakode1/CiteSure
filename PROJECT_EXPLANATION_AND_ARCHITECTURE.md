@@ -1,6 +1,6 @@
 # CiteSure: Architecture
 
-> **Status: pipeline implemented (v0.1.0). No evaluation has been run yet, so no measurements exist.** Numbers in this file are configuration values or targets, and are labelled as such.
+> **Status: v0.1.0, evaluated on the FastAPI documentation (100 questions, 4 retrieval configurations).** Results, the manual judge check and limitations are in the README; raw data is in `results/`.
 
 ## 1. Goal
 
@@ -68,7 +68,7 @@ These metrics are computed by an LLM judge (the local model, with JSON-schema-co
 
 1. **Retrieval ablation.** Dense only, BM25 only, hybrid with RRF, and hybrid with reranking, all on the same question set. Report the three metrics plus p95 latency for each.
 2. **Chunking.** Two or three chunk sizes and overlaps with the best retrieval configuration.
-3. **Regression gate.** Set the CI thresholds from the measured scores of the chosen configuration minus a tolerance. The values currently in the config (0.85 / 0.92 / 0.90) are placeholders until then.
+3. **Regression gate.** Done: CI thresholds are set from the measured hybrid_rerank scores minus a tolerance (context relevance 0.45, faithfulness 0.90, answer relevance 0.80).
 
 ## 5. Layout
 
@@ -81,7 +81,7 @@ src/citesure/evaluation/     RAG Triad judge metrics, ablation runner, CI gate
 src/citesure/serving/        FastAPI: POST /query, POST /query/stream (SSE), GET /health
 src/citesure/pipeline.py     Index build/load and end-to-end question answering
 scripts/                     build_index, generate_synthetic_data, evaluate_pipeline, ask
-data/documents/              Sample corpus (fictional API docs), to be replaced
+data/documents/              FastAPI documentation corpus (MIT), 122 pages
 data/evaluation/             QA set, created by generate_synthetic_data.py
 tests/                       Offline unit tests (hashing embedder, scripted LLM)
 ```

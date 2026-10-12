@@ -50,7 +50,8 @@ class ScriptedLLM:
     def structured(self, system: str, prompt: str, schema):
         self.calls.append((system, prompt))
         value = self.structured_responses[schema.__name__]
-        return value(prompt) if callable(value) else value
+        # A callable builds the response from the (possibly per-call) schema.
+        return value(schema) if callable(value) else value
 
 
 @pytest.fixture

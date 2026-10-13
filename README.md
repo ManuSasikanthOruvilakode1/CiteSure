@@ -2,6 +2,8 @@
 
 **Grounded document Q&A with continuous faithfulness evaluation.**
 
+Quick links: [Repository](https://github.com/ManuSasikanthOruvilakode1/CiteSure) | [License (MIT)](LICENSE)
+
 > **Status: v0.1.0, evaluated on real documentation.** The pipeline indexes the official FastAPI docs (122 pages, 1,083 chunks) and was evaluated on 100 questions across four retrieval configurations. Results and their limitations are below.
 
 A Retrieval-Augmented Generation (RAG) system for question answering over technical documentation. It combines hybrid sparse/dense retrieval with cross-encoder reranking, generates cited answers with a local LLM, and evaluates every change against the **RAG Triad**: context relevance, faithfulness and answer relevance. Everything runs locally at no cost.
@@ -28,7 +30,7 @@ Query ──► Hybrid retrieval (BM25 + dense, RRF) ──► Cross-encoder rer
 ## Project structure
 
 ```
-citesure/
+CiteSure/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                   # Lint + tests on every PR; opt-in RAG Triad gate

@@ -1,0 +1,185 @@
+{
+  "dataset": "data\\evaluation\\qa_pairs.jsonl",
+  "results": [
+    {
+      "chunk_size": 256,
+      "candidates": 10,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.97,
+      "mrr": 0.8778333333333334,
+      "ms_per_query": 166.82464399998935
+    },
+    {
+      "chunk_size": 256,
+      "candidates": 10,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.97,
+      "mrr": 0.8778333333333334,
+      "ms_per_query": 167.13630199999898
+    },
+    {
+      "chunk_size": 256,
+      "candidates": 20,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.97,
+      "mrr": 0.8728333333333333,
+      "ms_per_query": 288.1902149999951
+    },
+    {
+      "chunk_size": 256,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.97,
+      "mrr": 0.8728333333333333,
+      "ms_per_query": 290.4413579999891
+    },
+    {
+      "chunk_size": 256,
+      "candidates": 30,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.99,
+      "mrr": 0.879,
+      "ms_per_query": 375.6312070000058
+    },
+    {
+      "chunk_size": 256,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1178,
+      "hit_at_5": 0.99,
+      "mrr": 0.879,
+      "ms_per_query": 380.9956620000048
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 10,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.97,
+      "mrr": 0.8783333333333334,
+      "ms_per_query": 174.11069300000236
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 10,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.97,
+      "mrr": 0.8783333333333334,
+      "ms_per_query": 172.04200799998944
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 20,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.98,
+      "mrr": 0.8761666666666668,
+      "ms_per_query": 292.9773039999782
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.98,
+      "mrr": 0.8761666666666668,
+      "ms_per_query": 293.9998630000264
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 30,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 382.7261290000024
+    },
+    {
+      "chunk_size": 384,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1103,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 379.51243700001214
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 10,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.97,
+      "mrr": 0.8778333333333334,
+      "ms_per_query": 170.32753600000433
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 10,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.97,
+      "mrr": 0.8778333333333334,
+      "ms_per_query": 169.26822100002028
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 292.9945889999726
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 291.8645370000013
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 20,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 375.3440409999894
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.99,
+      "mrr": 0.8794999999999998,
+      "ms_per_query": 381.0407169999962
+    }
+  ]
+}

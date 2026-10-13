@@ -15,6 +15,7 @@ import json
 import sys
 from dataclasses import asdict
 from datetime import datetime, timezone
+from pathlib import Path
 
 from rich.console import Console
 
@@ -33,6 +34,8 @@ def main() -> int:
     parser.add_argument("--config", default=None)
     parser.add_argument("--modes", default=GATED_MODE.value, help="comma list of modes, or 'all'")
     parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--dataset", type=Path, default=None, help="defaults to paths.eval_dataset")
+    parser.add_argument("--tag", default="eval", help="prefix for the saved report file")
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--no-gate", action="store_true")
     args = parser.parse_args()
@@ -44,7 +47,7 @@ def main() -> int:
         if args.modes == "all"
         else [RetrievalMode(m.strip()) for m in args.modes.split(",")]
     )
-    samples = load_dataset(settings.resolve(settings.paths.eval_dataset), args.limit)
+    samples = load_dataset(args.dataset or settings.resolve(settings.paths.eval_dataset), args.limit)
     console.print(f"Evaluating {len(samples)} questions across modes: {[m.value for m in modes]}")
 
     with console.status("Loading models..."):
@@ -63,7 +66,7 @@ def main() -> int:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     reports_dir = settings.resolve(settings.paths.reports_dir)
     reports_dir.mkdir(parents=True, exist_ok=True)
-    (reports_dir / f"eval_{stamp}.json").write_text(
+    (reports_dir / f"{args.tag}_{stamp}.json").write_text(
         json.dumps(
             {
                 "timestamp": stamp,

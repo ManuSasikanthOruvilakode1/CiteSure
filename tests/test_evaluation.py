@@ -96,3 +96,38 @@ def test_generator_prompt_contains_numbered_passages(chunks):
 
 def test_extract_citations_ignores_out_of_range():
     assert extract_citations("a [1] b [3][1] c [9]", num_contexts=3) == [1, 3]
+
+
+def test_is_refusal_detects_exact_and_paraphrased_declines():
+    from citesure.evaluation.stats import is_refusal
+
+    assert is_refusal(REFUSAL_MESSAGE)
+    assert is_refusal("The provided documents do not cover rate limiting.")
+    assert not is_refusal("Use `status_code=201` in the decorator [1].")
+
+
+def test_wilson_interval_bounds():
+    from citesure.evaluation.stats import wilson_interval
+
+    p, lo, hi = wilson_interval(30, 30)
+    assert p == 1.0 and hi == 1.0 and 0.85 < lo < 0.9  # perfect score still has uncertainty
+    assert wilson_interval(0, 10)[1] == 0.0
+
+
+def test_bootstrap_ci_contains_mean_and_is_deterministic():
+    from citesure.evaluation.stats import bootstrap_ci
+
+    vals = [0.0, 1.0] * 50
+    mean, lo, hi = bootstrap_ci(vals)
+    assert lo < mean == 0.5 < hi
+    assert bootstrap_ci(vals) == (mean, lo, hi)
+
+
+def test_evidence_rank_survives_rechunking():
+    from citesure.evaluation.stats import evidence_rank
+
+    evidence = " ".join(f"word{i}" for i in range(200))
+    half = " ".join(f"word{i}" for i in range(100, 200))  # a smaller chunk inside the evidence
+    other = " ".join(f"other{i}" for i in range(200))
+    assert evidence_rank([other, half], evidence) == 2
+    assert evidence_rank([other], evidence) is None

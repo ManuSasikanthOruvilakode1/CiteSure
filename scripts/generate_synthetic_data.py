@@ -14,14 +14,16 @@ import json
 import random
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 
+import numpy as np
 from pydantic import BaseModel, Field
 from rich.console import Console
 from rich.progress import track
 
 from citesure.config import load_settings
 from citesure.generation.llm import make_llm
-from citesure.pipeline import load_chunks
+from citesure.pipeline import load_chunks, make_embedder
 from citesure.types import Chunk
 
 SYSTEM = (
@@ -60,12 +62,22 @@ def main() -> None:
     parser.add_argument("--n", type=int, default=None, help="defaults to evaluation.test_dataset_size")
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--out", type=Path, default=None, help="defaults to paths.eval_dataset")
+    parser.add_argument("--exclude", type=Path, action="append", default=[],
+                        help="existing dataset(s): their passages are skipped and near-duplicate "
+                             "questions are dropped, so a held-out set cannot leak into dev")
+    parser.add_argument("--dup-threshold", type=float, default=0.92,
+                        help="cosine similarity above which a question counts as a paraphrase")
     args = parser.parse_args()
 
     console = Console()
     settings = load_settings(args.config)
     n = args.n or settings.evaluation.test_dataset_size
     chunks = load_chunks(settings.resolve(settings.paths.index_dir))
+    excluded = [json.loads(line) for path in args.exclude
+                for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    used_chunks = {r.get("source_chunk_id") for r in excluded}
+    chunks = [c for c in chunks if c.chunk_id not in used_chunks]
     # Oversample to leave room for chunks the model marks as unusable.
     candidates = sample_chunks(chunks, int(n * 1.3) + 5, args.seed)
     if len(candidates) < n:
@@ -92,13 +104,29 @@ def main() -> None:
             "question_type": qa.question_type,
             "source_chunk_id": chunk.chunk_id,
             "source": chunk.source,
+            # The passage text itself: retrieval hits are matched on text overlap, so the
+            # label stays valid when the corpus is re-chunked with different settings.
+            "evidence": chunk.text,
         }
 
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         results = list(track(pool.map(generate, candidates), total=len(candidates), description="Generating"))
-    rows = [r for r in results if r][:n]
+    rows = [r for r in results if r]
+    if excluded and rows:
+        # Drop paraphrases of excluded questions (and of each other) across the split.
+        embedder = make_embedder(settings)
+        old = embedder.embed_documents([r["question"] for r in excluded])
+        kept, kept_vecs = [], []
+        for row, vec in zip(rows, embedder.embed_documents([r["question"] for r in rows]), strict=True):
+            sims = [float(np.max(old @ vec))] + [float(v @ vec) for v in kept_vecs]
+            if max(sims) < args.dup_threshold:
+                kept.append(row)
+                kept_vecs.append(vec)
+        console.print(f"Dropped {len(rows) - len(kept)} near-duplicate questions")
+        rows = kept
+    rows = rows[:n]
 
-    out = settings.resolve(settings.paths.eval_dataset)
+    out = args.out or settings.resolve(settings.paths.eval_dataset)
     out.parent.mkdir(parents=True, exist_ok=True)
     with out.open("w", encoding="utf-8") as f:
         for row in rows:

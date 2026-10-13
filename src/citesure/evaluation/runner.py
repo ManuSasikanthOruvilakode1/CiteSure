@@ -10,7 +10,8 @@ from pathlib import Path
 import numpy as np
 
 from citesure.config import EvaluationConfig
-from citesure.evaluation.metrics import TriadEvaluator, retrieval_hit_metrics
+from citesure.evaluation.metrics import TriadEvaluator
+from citesure.evaluation.stats import evidence_rank
 from citesure.pipeline import RAGPipeline
 from citesure.retrieval.hybrid import RetrievalMode
 
@@ -20,6 +21,7 @@ class EvalSample:
     question: str
     ground_truth: str = ""
     source_chunk_id: str = ""
+    evidence: str = ""
 
 
 @dataclass
@@ -41,7 +43,8 @@ def load_dataset(path: Path, limit: int | None = None) -> list[EvalSample]:
     with path.open(encoding="utf-8") as f:
         rows = [json.loads(line) for line in f if line.strip()]
     samples = [
-        EvalSample(r["question"], r.get("ground_truth", ""), r.get("source_chunk_id", ""))
+        EvalSample(r["question"], r.get("ground_truth", ""), r.get("source_chunk_id", ""),
+                   r.get("evidence", ""))
         for r in rows
     ]
     return samples[:limit] if limit else samples
@@ -67,6 +70,7 @@ def evaluate_mode(
             "question": a.question,
             "answer": a.answer,
             "contexts": [c.chunk.chunk_id for c in a.contexts],
+            "gold_rank": _gold_rank(samples[i], a.contexts),
             "latency_s": a.latency_s,
             **scores,
         }
@@ -91,11 +95,21 @@ def evaluate_mode(
         errors=len(rows) - len(ok),
         samples=rows,
     )
-    gold = [(s.source_chunk_id, r["contexts"]) for s, r in zip(samples, rows) if s.source_chunk_id]
-    if gold:
-        hits = retrieval_hit_metrics([ids for _, ids in gold], [g for g, _ in gold])
-        report.hit_rate, report.mrr = hits["hit_rate"], hits["mrr"]
+    labelled = [r for s, r in zip(samples, rows) if s.evidence or s.source_chunk_id]
+    if labelled:
+        ranks = [r["gold_rank"] for r in labelled]
+        report.hit_rate = sum(1 for k in ranks if k) / len(ranks)
+        report.mrr = sum(1 / k for k in ranks if k) / len(ranks)
     return report
+
+
+def _gold_rank(sample: EvalSample, contexts) -> int | None:
+    """Rank of the gold passage: matched on evidence text when present (chunking-independent),
+    otherwise on the source chunk id."""
+    if sample.evidence:
+        return evidence_rank([c.chunk.text for c in contexts], sample.evidence)
+    ids = [c.chunk.chunk_id for c in contexts]
+    return ids.index(sample.source_chunk_id) + 1 if sample.source_chunk_id in ids else None
 
 
 def check_gate(report: ModeReport, thresholds: EvaluationConfig) -> list[str]:

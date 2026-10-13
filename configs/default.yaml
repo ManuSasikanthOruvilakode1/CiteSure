@@ -29,7 +29,7 @@ retrieval:
   vector_store: "numpy"   # "numpy" (in-process) or "qdrant" (requires the `qdrant` extra)
   top_k_dense: 30
   top_k_sparse: 30
-  top_k_fused: 30
+  top_k_fused: 20             # tuned 2026-10-13: same dev accuracy as 30, ~23% faster reranking
   top_k_reranked: 5
   rrf_k: 60
   # Reranked passages scoring below this are dropped (relevant ones score ~0.1-1.0,

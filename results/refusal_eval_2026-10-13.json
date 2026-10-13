@@ -1,0 +1,1050 @@
+{
+  "timestamp": "2026-10-13T08:04:49.894422+00:00",
+  "modes": {
+    "dense": {
+      "samples": [
+        {
+          "question": "How do I enable FastAPI's built-in admin panel?",
+          "category": "near_miss",
+          "absent_term": "admin panel",
+          "answer": "I don't know based on the provided documents. The documents do not mention any specific steps to enable FastAPI's built-in admin panel.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 7.524
+        },
+        {
+          "question": "How do I connect a FastAPI app to an MQTT broker?",
+          "category": "near_miss",
+          "absent_term": "MQTT",
+          "answer": "I don't know based on the provided documents. The passages do not mention MQTT or any method to connect a FastAPI app to an MQTT broker.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.834
+        },
+        {
+          "question": "Does FastAPI support HTTP/3, and how do I turn it on?",
+          "category": "near_miss",
+          "absent_term": "HTTP/3",
+          "answer": "I don't know based on the provided documents.\n\nThe documents mention ASGI servers like Hypercorn that support HTTP/2, but they do not specifically mention HTTP/3 or how to enable it for FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.159
+        },
+        {
+          "question": "How do I consume Kafka topics inside a FastAPI path operation?",
+          "category": "near_miss",
+          "absent_term": "Kafka",
+          "answer": "I don't know based on the provided documents. The passages focus on using FastAPI with routers, path operations, dependencies, and how to structure a FastAPI application, but do not mention anything about consuming Kafka topics inside FastAPI path operations.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.89
+        },
+        {
+          "question": "What is the name of FastAPI's built-in rate limiting decorator?",
+          "category": "near_miss",
+          "absent_term": "rate limit",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.865
+        },
+        {
+          "question": "How do I schedule a cron job with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "cron",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about scheduling cron jobs with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.123
+        },
+        {
+          "question": "How do I expose a gRPC service from a FastAPI application?",
+          "category": "near_miss",
+          "absent_term": "gRPC",
+          "answer": "I don't know based on the provided documents. The passages do not mention gRPC or how to expose gRPC services from a FastAPI application.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.805
+        },
+        {
+          "question": "What is the default maximum request body size in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "body size",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.725
+        },
+        {
+          "question": "How do I throttle requests per user in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "throttl",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to implement request throttling per user in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.027
+        },
+        {
+          "question": "How do I add i18n translations to FastAPI validation error messages?",
+          "category": "near_miss",
+          "absent_term": "i18n",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about adding internationalization (i18n) translations to FastAPI validation error messages.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.428
+        },
+        {
+          "question": "How do I serve XML-RPC endpoints with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "XML-RPC",
+          "answer": "I don't know based on the provided documents. The given passages do not mention XML-RPC or how to serve XML-RPC endpoints with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.365
+        },
+        {
+          "question": "How do I build a multi-tenant FastAPI app with one database per tenant?",
+          "category": "near_miss",
+          "absent_term": "multi-tenan",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to build a multi-tenant FastAPI app with one database per tenant. They discuss running a single FastAPI app, using different databases including SQL databases, and deploying FastAPI applications, but do not provide information on multi-tenant architecture.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.732
+        },
+        {
+          "question": "How do I add feature flags to FastAPI routes?",
+          "category": "near_miss",
+          "absent_term": "feature flag",
+          "answer": "I don't know based on the provided documents. The passages do not mention feature flags for FastAPI routes.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.119
+        },
+        {
+          "question": "How do I do blue-green deployments of a FastAPI service?",
+          "category": "near_miss",
+          "absent_term": "blue-green",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.472
+        },
+        {
+          "question": "How do I add a circuit breaker to outbound HTTP calls in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "circuit breaker",
+          "answer": "I don't know based on the provided documents. The passages discuss adding callback functionality, creating path operations, and handling additional status codes in FastAPI, but do not mention circuit breaker mechanisms for outbound HTTP calls.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.629
+        },
+        {
+          "question": "What is the capital of France?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.723
+        },
+        {
+          "question": "How do I bake sourdough bread?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.624
+        },
+        {
+          "question": "Who won the 2022 FIFA World Cup?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.617
+        },
+        {
+          "question": "Explain how photosynthesis works.",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 2.054
+        },
+        {
+          "question": "What is a computer?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.932
+        },
+        {
+          "question": "What is the boiling point of water at sea level?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.818
+        },
+        {
+          "question": "How do you say 'good morning' in Spanish?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.691
+        },
+        {
+          "question": "What is the tallest mountain in the world?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.609
+        },
+        {
+          "question": "How many legs does a spider have?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.51
+        },
+        {
+          "question": "Can you recommend a good science fiction novel?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.883
+        },
+        {
+          "question": "What is the speed of light?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.656
+        },
+        {
+          "question": "How do I change a flat car tyre?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.097
+        },
+        {
+          "question": "In what year did World War II end?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.822
+        },
+        {
+          "question": "What is the best way to learn the piano?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.842
+        },
+        {
+          "question": "What will the weather be like in Sydney tomorrow?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.578
+        }
+      ],
+      "false_refusals_answerable": 3,
+      "answerable_n": 100
+    },
+    "bm25": {
+      "samples": [
+        {
+          "question": "How do I enable FastAPI's built-in admin panel?",
+          "category": "near_miss",
+          "absent_term": "admin panel",
+          "answer": "I don't know based on the provided documents. The passages discuss including routers and managing dependencies, but do not mention how to enable FastAPI's built-in admin panel.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.447
+        },
+        {
+          "question": "How do I connect a FastAPI app to an MQTT broker?",
+          "category": "near_miss",
+          "absent_term": "MQTT",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.65
+        },
+        {
+          "question": "Does FastAPI support HTTP/3, and how do I turn it on?",
+          "category": "near_miss",
+          "absent_term": "HTTP/3",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.876
+        },
+        {
+          "question": "How do I consume Kafka topics inside a FastAPI path operation?",
+          "category": "near_miss",
+          "absent_term": "Kafka",
+          "answer": "I don't know based on the provided documents. The passages discuss using FastAPI with async functions, dependencies, and deployment strategies, but do not mention consuming Kafka topics.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.022
+        },
+        {
+          "question": "What is the name of FastAPI's built-in rate limiting decorator?",
+          "category": "near_miss",
+          "absent_term": "rate limit",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.14
+        },
+        {
+          "question": "How do I schedule a cron job with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "cron",
+          "answer": "I don't know based on the provided documents. The passages do not mention cron jobs or how to schedule them with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.89
+        },
+        {
+          "question": "How do I expose a gRPC service from a FastAPI application?",
+          "category": "near_miss",
+          "absent_term": "gRPC",
+          "answer": "I don't know based on the provided documents. The passages discuss Docker deployment, server workers, OpenTelemetry, and generating clients for FastAPI, but do not mention gRPC services.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.15
+        },
+        {
+          "question": "What is the default maximum request body size in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "body size",
+          "answer": "I don't know based on the provided documents. The passages do not specify a default maximum request body size for FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.371
+        },
+        {
+          "question": "How do I throttle requests per user in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "throttl",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to throttle requests per user in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.039
+        },
+        {
+          "question": "How do I add i18n translations to FastAPI validation error messages?",
+          "category": "near_miss",
+          "absent_term": "i18n",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about adding internationalization (i18n) translations to FastAPI validation error messages.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.384
+        },
+        {
+          "question": "How do I serve XML-RPC endpoints with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "XML-RPC",
+          "answer": "I don't know based on the provided documents. The passages do not mention XML-RPC or any related endpoints in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.962
+        },
+        {
+          "question": "How do I build a multi-tenant FastAPI app with one database per tenant?",
+          "category": "near_miss",
+          "absent_term": "multi-tenan",
+          "answer": "I don't know based on the provided documents. The passages do not contain information about building a multi-tenant FastAPI application or managing databases per tenant.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.043
+        },
+        {
+          "question": "How do I add feature flags to FastAPI routes?",
+          "category": "near_miss",
+          "absent_term": "feature flag",
+          "answer": "I don't know based on the provided documents. The passages do not contain any information about adding feature flags to FastAPI routes.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.091
+        },
+        {
+          "question": "How do I do blue-green deployments of a FastAPI service?",
+          "category": "near_miss",
+          "absent_term": "blue-green",
+          "answer": "I don't know based on the provided documents. The passages discuss Docker, Kubernetes, and cloud services in general terms but do not specifically cover blue-green deployments for FastAPI services.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.098
+        },
+        {
+          "question": "How do I add a circuit breaker to outbound HTTP calls in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "circuit breaker",
+          "answer": "I don't know based on the provided documents. The passages discuss using `TestClient` for testing, deploying FastAPI with Docker, generating client SDKs, and writing async tests, but do not mention adding a circuit breaker to outbound HTTP calls.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.441
+        },
+        {
+          "question": "What is the capital of France?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.899
+        },
+        {
+          "question": "How do I bake sourdough bread?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.484
+        },
+        {
+          "question": "Who won the 2022 FIFA World Cup?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.705
+        },
+        {
+          "question": "Explain how photosynthesis works.",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.394
+        },
+        {
+          "question": "What is a computer?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents. The passages do not contain a definition or description of what a computer is.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.476
+        },
+        {
+          "question": "What is the boiling point of water at sea level?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.931
+        },
+        {
+          "question": "How do you say 'good morning' in Spanish?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.674
+        },
+        {
+          "question": "What is the tallest mountain in the world?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.735
+        },
+        {
+          "question": "How many legs does a spider have?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.812
+        },
+        {
+          "question": "Can you recommend a good science fiction novel?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.736
+        },
+        {
+          "question": "What is the speed of light?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.94
+        },
+        {
+          "question": "How do I change a flat car tyre?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.737
+        },
+        {
+          "question": "In what year did World War II end?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.921
+        },
+        {
+          "question": "What is the best way to learn the piano?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.692
+        },
+        {
+          "question": "What will the weather be like in Sydney tomorrow?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.943
+        }
+      ],
+      "false_refusals_answerable": 8,
+      "answerable_n": 100
+    },
+    "hybrid": {
+      "samples": [
+        {
+          "question": "How do I enable FastAPI's built-in admin panel?",
+          "category": "near_miss",
+          "absent_term": "admin panel",
+          "answer": "I don't know based on the provided documents. The documents do not mention any configuration for enabling FastAPI's built-in admin panel.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.156
+        },
+        {
+          "question": "How do I connect a FastAPI app to an MQTT broker?",
+          "category": "near_miss",
+          "absent_term": "MQTT",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.596
+        },
+        {
+          "question": "Does FastAPI support HTTP/3, and how do I turn it on?",
+          "category": "near_miss",
+          "absent_term": "HTTP/3",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.667
+        },
+        {
+          "question": "How do I consume Kafka topics inside a FastAPI path operation?",
+          "category": "near_miss",
+          "absent_term": "Kafka",
+          "answer": "I don't know based on the provided documents. The passages discuss using FastAPI with path operations, dependencies, and additional status codes, but do not mention consuming Kafka topics.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.35
+        },
+        {
+          "question": "What is the name of FastAPI's built-in rate limiting decorator?",
+          "category": "near_miss",
+          "absent_term": "rate limit",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.826
+        },
+        {
+          "question": "How do I schedule a cron job with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "cron",
+          "answer": "I don't know based on the provided documents. The passages do not contain any information about scheduling cron jobs with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.138
+        },
+        {
+          "question": "How do I expose a gRPC service from a FastAPI application?",
+          "category": "near_miss",
+          "absent_term": "gRPC",
+          "answer": "I don't know based on the provided documents. The passages discuss mounting sub-applications, running FastAPI in production, using the FastAPI CLI, and deploying FastAPI in Docker containers, but do not mention gRPC services.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.429
+        },
+        {
+          "question": "What is the default maximum request body size in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "body size",
+          "answer": "I don't know based on the provided documents. The passages do not specify a default maximum request body size for FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.113
+        },
+        {
+          "question": "How do I throttle requests per user in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "throttl",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to implement request throttling per user in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.159
+        },
+        {
+          "question": "How do I add i18n translations to FastAPI validation error messages?",
+          "category": "near_miss",
+          "absent_term": "i18n",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about adding internationalization (i18n) translations to FastAPI validation error messages.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.523
+        },
+        {
+          "question": "How do I serve XML-RPC endpoints with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "XML-RPC",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.816
+        },
+        {
+          "question": "How do I build a multi-tenant FastAPI app with one database per tenant?",
+          "category": "near_miss",
+          "absent_term": "multi-tenan",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to build a multi-tenant FastAPI application with one database per tenant. They discuss single databases, Uvicorn processes, and Docker container configurations, but do not address multi-tenant architectures or database per tenant setups.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.776
+        },
+        {
+          "question": "How do I add feature flags to FastAPI routes?",
+          "category": "near_miss",
+          "absent_term": "feature flag",
+          "answer": "I don't know based on the provided documents. The passages do not mention feature flags or how to implement them in FastAPI routes.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.292
+        },
+        {
+          "question": "How do I do blue-green deployments of a FastAPI service?",
+          "category": "near_miss",
+          "absent_term": "blue-green",
+          "answer": "I don't know based on the provided documents. The passages do not mention blue-green deployments specifically for FastAPI services.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.958
+        },
+        {
+          "question": "How do I add a circuit breaker to outbound HTTP calls in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "circuit breaker",
+          "answer": "I don't know based on the provided documents. The passages discuss path operations, testing, OpenAPI callbacks, server workers, and Docker deployment strategies, but do not mention circuit breakers for outbound HTTP calls in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.592
+        },
+        {
+          "question": "What is the capital of France?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.725
+        },
+        {
+          "question": "How do I bake sourdough bread?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.536
+        },
+        {
+          "question": "Who won the 2022 FIFA World Cup?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.728
+        },
+        {
+          "question": "Explain how photosynthesis works.",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.562
+        },
+        {
+          "question": "What is a computer?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.002
+        },
+        {
+          "question": "What is the boiling point of water at sea level?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.877
+        },
+        {
+          "question": "How do you say 'good morning' in Spanish?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.727
+        },
+        {
+          "question": "What is the tallest mountain in the world?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.776
+        },
+        {
+          "question": "How many legs does a spider have?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.897
+        },
+        {
+          "question": "Can you recommend a good science fiction novel?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.691
+        },
+        {
+          "question": "What is the speed of light?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.522
+        },
+        {
+          "question": "How do I change a flat car tyre?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.171
+        },
+        {
+          "question": "In what year did World War II end?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.931
+        },
+        {
+          "question": "What is the best way to learn the piano?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.576
+        },
+        {
+          "question": "What will the weather be like in Sydney tomorrow?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.653
+        }
+      ],
+      "false_refusals_answerable": 3,
+      "answerable_n": 100
+    },
+    "hybrid_rerank": {
+      "samples": [
+        {
+          "question": "How do I enable FastAPI's built-in admin panel?",
+          "category": "near_miss",
+          "absent_term": "admin panel",
+          "answer": "I don't know based on the provided documents. The passages discuss including and configuring `APIRouter` instances within a FastAPI application but do not mention anything about enabling FastAPI's built-in admin panel.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.934
+        },
+        {
+          "question": "How do I connect a FastAPI app to an MQTT broker?",
+          "category": "near_miss",
+          "absent_term": "MQTT",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 0.976
+        },
+        {
+          "question": "Does FastAPI support HTTP/3, and how do I turn it on?",
+          "category": "near_miss",
+          "absent_term": "HTTP/3",
+          "answer": "I don't know based on the provided documents. The documents do not mention HTTP/3 support or instructions on how to enable it for FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.391
+        },
+        {
+          "question": "How do I consume Kafka topics inside a FastAPI path operation?",
+          "category": "near_miss",
+          "absent_term": "Kafka",
+          "answer": "I don't know based on the provided documents. The given passages discuss including routers, using the Request object, defining dependencies, and working with path operations in FastAPI, but do not mention consuming Kafka topics.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.623
+        },
+        {
+          "question": "What is the name of FastAPI's built-in rate limiting decorator?",
+          "category": "near_miss",
+          "absent_term": "rate limit",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.279
+        },
+        {
+          "question": "How do I schedule a cron job with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "cron",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about scheduling cron jobs with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.484
+        },
+        {
+          "question": "How do I expose a gRPC service from a FastAPI application?",
+          "category": "near_miss",
+          "absent_term": "gRPC",
+          "answer": "I don't know based on the provided documents. The passages do not mention gRPC or any information about exposing gRPC services from a FastAPI application.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.413
+        },
+        {
+          "question": "What is the default maximum request body size in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "body size",
+          "answer": "I don't know based on the provided documents. The documents do not specify a default maximum request body size for FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.491
+        },
+        {
+          "question": "How do I throttle requests per user in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "throttl",
+          "answer": "I don't know based on the provided documents. The passages do not cover how to implement request throttling per user in FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.348
+        },
+        {
+          "question": "How do I add i18n translations to FastAPI validation error messages?",
+          "category": "near_miss",
+          "absent_term": "i18n",
+          "answer": "I don't know based on the provided documents. The passages focus on customizing and handling validation errors and other exceptions in FastAPI but do not mention anything about integrating internationalization (i18n) for translations in validation error messages.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 2.019
+        },
+        {
+          "question": "How do I serve XML-RPC endpoints with FastAPI?",
+          "category": "near_miss",
+          "absent_term": "XML-RPC",
+          "answer": "I don't know based on the provided documents. The passages do not mention XML-RPC or how to serve XML-RPC endpoints with FastAPI.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.631
+        },
+        {
+          "question": "How do I build a multi-tenant FastAPI app with one database per tenant?",
+          "category": "near_miss",
+          "absent_term": "multi-tenan",
+          "answer": "I don't know based on the provided documents. The given passages discuss using FastAPI with SQL databases, including SQLite, and creating a simple CRUD application. They do not provide information on how to build a multi-tenant application with one database per tenant.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 2.203
+        },
+        {
+          "question": "How do I add feature flags to FastAPI routes?",
+          "category": "near_miss",
+          "absent_term": "feature flag",
+          "answer": "I don't know based on the provided documents. The passages do not mention anything about adding feature flags to FastAPI routes.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.433
+        },
+        {
+          "question": "How do I do blue-green deployments of a FastAPI service?",
+          "category": "near_miss",
+          "absent_term": "blue-green",
+          "answer": "I don't know based on the provided documents. The given passages do not mention blue-green deployments specifically for FastAPI services.",
+          "refused": true,
+          "passages": 5,
+          "latency_s": 1.312
+        },
+        {
+          "question": "How do I add a circuit breaker to outbound HTTP calls in FastAPI?",
+          "category": "near_miss",
+          "absent_term": "circuit breaker",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 2,
+          "latency_s": 0.739
+        },
+        {
+          "question": "What is the capital of France?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.298
+        },
+        {
+          "question": "How do I bake sourdough bread?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.276
+        },
+        {
+          "question": "Who won the 2022 FIFA World Cup?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.266
+        },
+        {
+          "question": "Explain how photosynthesis works.",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.289
+        },
+        {
+          "question": "What is a computer?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.278
+        },
+        {
+          "question": "What is the boiling point of water at sea level?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.299
+        },
+        {
+          "question": "How do you say 'good morning' in Spanish?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.286
+        },
+        {
+          "question": "What is the tallest mountain in the world?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.248
+        },
+        {
+          "question": "How many legs does a spider have?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.268
+        },
+        {
+          "question": "Can you recommend a good science fiction novel?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.283
+        },
+        {
+          "question": "What is the speed of light?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.284
+        },
+        {
+          "question": "How do I change a flat car tyre?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.29
+        },
+        {
+          "question": "In what year did World War II end?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.301
+        },
+        {
+          "question": "What is the best way to learn the piano?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.298
+        },
+        {
+          "question": "What will the weather be like in Sydney tomorrow?",
+          "category": "out_of_scope",
+          "answer": "I don't know based on the provided documents.",
+          "refused": true,
+          "passages": 0,
+          "latency_s": 0.276
+        }
+      ],
+      "false_refusals_answerable": 3,
+      "answerable_n": 100
+    }
+  },
+  "table": "| Mode | Correct refusals: near_miss | Correct refusals: out_of_scope | False refusals (answerable) |\n|---|---|---|---|\n| dense | 15/15 (100%, 95% CI 80%–100%) | 15/15 (100%, 95% CI 80%–100%) | 3/100 (3%, 95% CI 1%–8%) |\n| bm25 | 15/15 (100%, 95% CI 80%–100%) | 15/15 (100%, 95% CI 80%–100%) | 8/100 (8%, 95% CI 4%–15%) |\n| hybrid | 15/15 (100%, 95% CI 80%–100%) | 15/15 (100%, 95% CI 80%–100%) | 3/100 (3%, 95% CI 1%–8%) |\n| hybrid_rerank | 15/15 (100%, 95% CI 80%–100%) | 15/15 (100%, 95% CI 80%–100%) | 3/100 (3%, 95% CI 1%–8%) |"
+}

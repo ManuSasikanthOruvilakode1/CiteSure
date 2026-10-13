@@ -1,0 +1,85 @@
+{
+  "dataset": "data\\evaluation\\qa_heldout.jsonl",
+  "results": [
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "dense",
+      "chunks": 1083,
+      "hit_at_5": 0.88,
+      "mrr": 0.7518333333333334,
+      "ms_per_query": 23.339038499998424
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "bm25",
+      "chunks": 1083,
+      "hit_at_5": 0.87,
+      "mrr": 0.7633333333333333,
+      "ms_per_query": 3.56773699999394
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "hybrid",
+      "chunks": 1083,
+      "hit_at_5": 0.93,
+      "mrr": 0.81,
+      "ms_per_query": 27.426854000004823
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 30,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.945,
+      "mrr": 0.8656666666666666,
+      "ms_per_query": 381.41319600001225
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "dense",
+      "chunks": 1083,
+      "hit_at_5": 0.88,
+      "mrr": 0.7518333333333334,
+      "ms_per_query": 21.582596500011277
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "bm25",
+      "chunks": 1083,
+      "hit_at_5": 0.87,
+      "mrr": 0.7633333333333333,
+      "ms_per_query": 3.758260499998869
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "hybrid",
+      "chunks": 1083,
+      "hit_at_5": 0.93,
+      "mrr": 0.81,
+      "ms_per_query": 24.797618499997043
+    },
+    {
+      "chunk_size": 512,
+      "candidates": 20,
+      "rrf_k": 60,
+      "mode": "hybrid_rerank",
+      "chunks": 1083,
+      "hit_at_5": 0.95,
+      "mrr": 0.8694166666666666,
+      "ms_per_query": 289.5809580000059
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{"question": "How do I enable FastAPI's built-in admin panel?", "category": "near_miss", "absent_term": "admin panel"}
+{"question": "How do I connect a FastAPI app to an MQTT broker?", "category": "near_miss", "absent_term": "MQTT"}
+{"question": "Does FastAPI support HTTP/3, and how do I turn it on?", "category": "near_miss", "absent_term": "HTTP/3"}
+{"question": "How do I consume Kafka topics inside a FastAPI path operation?", "category": "near_miss", "absent_term": "Kafka"}
+{"question": "What is the name of FastAPI's built-in rate limiting decorator?", "category": "near_miss", "absent_term": "rate limit"}
+{"question": "How do I schedule a cron job with FastAPI?", "category": "near_miss", "absent_term": "cron"}
+{"question": "How do I expose a gRPC service from a FastAPI application?", "category": "near_miss", "absent_term": "gRPC"}
+{"question": "What is the default maximum request body size in FastAPI?", "category": "near_miss", "absent_term": "body size"}
+{"question": "How do I throttle requests per user in FastAPI?", "category": "near_miss", "absent_term": "throttl"}
+{"question": "How do I add i18n translations to FastAPI validation error messages?", "category": "near_miss", "absent_term": "i18n"}
+{"question": "How do I serve XML-RPC endpoints with FastAPI?", "category": "near_miss", "absent_term": "XML-RPC"}
+{"question": "How do I build a multi-tenant FastAPI app with one database per tenant?", "category": "near_miss", "absent_term": "multi-tenan"}
+{"question": "How do I add feature flags to FastAPI routes?", "category": "near_miss", "absent_term": "feature flag"}
+{"question": "How do I do blue-green deployments of a FastAPI service?", "category": "near_miss", "absent_term": "blue-green"}
+{"question": "How do I add a circuit breaker to outbound HTTP calls in FastAPI?", "category": "near_miss", "absent_term": "circuit breaker"}
+{"question": "What is the capital of France?", "category": "out_of_scope"}
+{"question": "How do I bake sourdough bread?", "category": "out_of_scope"}
+{"question": "Who won the 2022 FIFA World Cup?", "category": "out_of_scope"}
+{"question": "Explain how photosynthesis works.", "category": "out_of_scope"}
+{"question": "What is a computer?", "category": "out_of_scope"}
+{"question": "What is the boiling point of water at sea level?", "category": "out_of_scope"}
+{"question": "How do you say 'good morning' in Spanish?", "category": "out_of_scope"}
+{"question": "What is the tallest mountain in the world?", "category": "out_of_scope"}
+{"question": "How many legs does a spider have?", "category": "out_of_scope"}
+{"question": "Can you recommend a good science fiction novel?", "category": "out_of_scope"}
+{"question": "What is the speed of light?", "category": "out_of_scope"}
+{"question": "How do I change a flat car tyre?", "category": "out_of_scope"}
+{"question": "In what year did World War II end?", "category": "out_of_scope"}
+{"question": "What is the best way to learn the piano?", "category": "out_of_scope"}
+{"question": "What will the weather be like in Sydney tomorrow?", "category": "out_of_scope"}

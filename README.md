@@ -19,7 +19,7 @@ Query ──► Hybrid retrieval (BM25 + dense, RRF) ──► Cross-encoder rer
 | Ingestion | Markdown/PDF/text loaders; header-aware recursive chunking (512 tokens, ~10% overlap) with section-path metadata | Done |
 | Sparse retrieval | BM25 Okapi (`rank-bm25`), identifier-preserving tokenizer | Done |
 | Dense retrieval | `BAAI/bge-large-en-v1.5`, in-process numpy store (default) or Qdrant | Done |
-| Fusion + rerank | Reciprocal Rank Fusion (k = 60) over top-30 + top-30, then `BAAI/bge-reranker-large` to top 5; passages scoring below 0.02 are dropped | Done |
+| Fusion + rerank | Reciprocal Rank Fusion (k = 60) over top-30 + top-30, then `BAAI/bge-reranker-large` reranks the top 20 fused passages to 5; passages scoring below 0.02 are dropped | Done |
 | Generation | Local LLM via Ollama (`qwen2.5:7b`); numbered-passage citations; refuses, without calling the LLM, when no passage is relevant | Done |
 | Evaluation | LLM-judge RAG Triad, plus retrieval hit rate/MRR; ablation across four retrieval modes | Done |
 | Regression gate | `scripts/evaluate_pipeline.py` exits non-zero below thresholds; wired into GitHub Actions | Done |
@@ -40,13 +40,19 @@ CiteSure/
 │   ├── documents/                   # Corpus to index (Markdown, PDF, plain text)
 │   │   └── fastapi/                 # FastAPI docs, 122 pages (MIT); see SOURCE and LICENSE
 │   └── evaluation/
-│       └── qa_pairs.jsonl           # 100 QA pairs, created by generate_synthetic_data.py
+│       ├── qa_pairs.jsonl           # 100 dev questions, created by generate_synthetic_data.py
+│       ├── qa_heldout.jsonl         # 200 held-out questions (no shared passages or paraphrases)
+│       └── unanswerable.jsonl       # 30 hand-written questions the corpus cannot answer
+├── results/                         # Saved evaluation outputs (per-question JSON)
 ├── scripts/
 │   ├── prepare_fastapi_docs.py      # Convert FastAPI's docs into the corpus above
 │   ├── build_index.py               # Load, chunk, embed and save the corpus
 │   ├── ask.py                       # Ask one question from the command line
 │   ├── generate_synthetic_data.py   # Build the QA evaluation set from indexed chunks
-│   └── evaluate_pipeline.py         # Run the RAG Triad evaluation and quality gate
+│   ├── evaluate_pipeline.py         # Run the RAG Triad evaluation and quality gate
+│   ├── evaluate_refusals.py         # Measure refusals on unanswerable questions
+│   ├── sweep_retrieval.py           # Tune retrieval settings with judge-free metrics
+│   └── summarize_results.py         # Add 95% confidence intervals to saved results
 ├── src/
 │   └── citesure/
 │       ├── __init__.py
@@ -72,7 +78,8 @@ CiteSure/
 │       ├── evaluation/
 │       │   ├── __init__.py
 │       │   ├── metrics.py           # Context relevance, faithfulness, answer relevance
-│       │   └── runner.py            # Per-mode evaluation, reports, quality gate
+│       │   ├── runner.py            # Per-mode evaluation, reports, quality gate
+│       │   └── stats.py             # Bootstrap / Wilson intervals, refusal detection
 │       └── serving/
 │           ├── __init__.py
 │           ├── app.py               # FastAPI app: demo page, /query, /query/stream, /health
@@ -144,12 +151,53 @@ Measured on 2026-10-12 against the FastAPI corpus: 100 questions, each run throu
 - **The judge-scored metrics barely separate the configurations.** Differences of ±0.03 are within the noise of a 7B judge on 100 questions; the retrieval metrics separate them clearly.
 - **Latency:** a typical answer takes about 3 s end to end; the p95 of about 7 s comes from long answers that include code. Retrieval with reranking takes about 0.2 s of that.
 
+**Uncertainty.** `scripts/summarize_results.py` adds 95% bootstrap confidence intervals to the table above, from the saved per-question data. Reranking's Hit@5 gain is outside the noise (0.99 [0.97, 1.00] vs 0.92 [0.87, 0.97] for dense), and its MRR interval [0.79, 0.90] only slightly overlaps dense's [0.66, 0.80]. The faithfulness intervals for all four configurations overlap, so no configuration is shown to be more faithful than another.
+
+### Refusal behaviour
+
+CiteSure should decline when the corpus has no answer instead of guessing. `scripts/evaluate_refusals.py` measures this with 30 hand-written unanswerable questions (`data/evaluation/unanswerable.jsonl`), no LLM judge involved:
+
+- **Near-miss (15):** FastAPI-sounding questions on topics the docs never mention, e.g. "What is the name of FastAPI's built-in rate limiting decorator?" Each topic was checked to have zero occurrences in the corpus.
+- **Out of scope (15):** unrelated questions, e.g. "What is the capital of France?"
+
+| Configuration | Correct refusals: near-miss | Correct refusals: out of scope | False refusals on the 100 answerable questions |
+|---|---|---|---|
+| Dense only | 15/15 | 15/15 | 3/100 |
+| BM25 only | 15/15 | 15/15 | 8/100 |
+| Hybrid | 15/15 | 15/15 | 3/100 |
+| **Hybrid + rerank** | **15/15** | **15/15** | **3/100** |
+
+All 30 unanswerable questions were refused in every configuration. With 15 questions per category, the 95% Wilson interval on a perfect score is still 80–100%, so this shows reliable refusal on these question types, not that hallucination is impossible. The near-miss questions are the harder test: they retrieve related FastAPI passages in every configuration (none are stopped by the relevance floor), and the model still declines because the passages do not contain the answer. A "false refusal" counts answers that decline in whole or in part; BM25 has the most because keyword search more often misses the right passage.
+
+### Tuning with a dev / held-out split
+
+The models are used as published, with no fine-tuning. Only retrieval settings were tuned, on the original 100 questions (**dev**), then confirmed once on **200 new held-out questions** generated from passages the dev set does not use, with paraphrases of dev questions filtered out (cosine similarity ≥ 0.92). Hits are matched on each question's evidence text rather than a chunk id, so labels stay valid when the corpus is re-chunked.
+
+**Sweep on dev** (`scripts/sweep_retrieval.py`, judge-free, hybrid + rerank, 18 settings; [`results/sweep_dev_2026-10-13.json`](results/sweep_dev_2026-10-13.json)):
+- **Chunk size (256 / 384 / 512 words) made no meaningful difference** (MRR 0.873–0.879). The chunker splits on section headings first and most FastAPI sections are short, so 256-word chunks give only 9% more chunks than 512.
+- **RRF k (20 vs 60) had no effect**: the cross-encoder re-sorts the fused list anyway.
+- **Reranking 20 fused candidates instead of 30 kept the same accuracy** (Hit@5 0.99, MRR 0.879) and cut retrieval time by about a quarter. 10 candidates lowered Hit@5 to 0.97.
+
+Chosen change: **reranker candidates 30 → 20**; everything else stays at its original value.
+
+**Held-out confirmation** (200 questions, run once; [`results/sweep_heldout_2026-10-13.json`](results/sweep_heldout_2026-10-13.json), [`results/heldout_eval_2026-10-13.json`](results/heldout_eval_2026-10-13.json)):
+
+| Hybrid + rerank | Hit@5 | MRR | Retrieval time |
+|---|---|---|---|
+| Before (30 candidates) | 0.94 [0.91, 0.97] | 0.866 [0.82, 0.91] | 381 ms |
+| **After (20 candidates)** | **0.95 [0.92, 0.98]** | **0.869 [0.83, 0.91]** | **290 ms (−24%)** |
+
+Full evaluation of the tuned configuration on the held-out set: context relevance 0.50 [0.47, 0.54], faithfulness 0.93 [0.90, 0.95], answer relevance 0.86 [0.84, 0.88], false refusals 8/200, latency p50 2.9 s / p95 7.5 s, 0 errors. These match the dev results within their confidence intervals, so the dev numbers were not inflated, and reranking still leads on unseen questions (Hit@5 0.95 vs 0.88 for dense alone, intervals not overlapping). The held-out run passes the CI gate thresholds.
+
+The honest conclusion: the original settings were already close to the best available for this corpus; tuning bought speed, not accuracy.
+
 **Limitations**
 - The questions are synthetic: `qwen2.5:7b` wrote one question per sampled passage, and the same model judged the answers. Same-model generation and judging tends to overstate quality.
 - A 7B judge is noisy (see the manual check above). Hand-labelling a subset to measure judge agreement is still to do.
 - Questions written from a single passage favour lookup-style questions; multi-page reasoning is under-tested.
+- The unanswerable set is small (30) and written by the author; it covers missing topics, not subtly wrong premises.
 
-To reproduce: `uv run python scripts/evaluate_pipeline.py --modes all` (about 75 minutes on the hardware above).
+To reproduce: `uv run python scripts/evaluate_pipeline.py --modes all` (about 75 minutes on the hardware above), then `uv run python scripts/summarize_results.py` for confidence intervals, `uv run python scripts/sweep_retrieval.py --dataset data/evaluation/qa_pairs.jsonl` for the tuning sweep, and `uv run python scripts/evaluate_refusals.py` for refusal behaviour (about 5 minutes).
 
 The CI gate thresholds in [`configs/default.yaml`](configs/default.yaml) are set from these measurements minus a small tolerance, so a change that makes answers less grounded or retrieval worse fails the gate.
 

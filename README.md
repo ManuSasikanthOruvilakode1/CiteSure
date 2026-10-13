@@ -211,7 +211,7 @@ Still open:
 
 See [`PROJECT_EXPLANATION_AND_ARCHITECTURE.md`](PROJECT_EXPLANATION_AND_ARCHITECTURE.md) for the architecture and the metric definitions.
 
-## License
+## License 
 
 CiteSure is released under the [MIT License](LICENSE).
 
